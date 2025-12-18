@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Виртуалды химия зертханасы - №4 Жұмыс</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+
+        .test-tube {
+            width: 50px;
+            height: 180px;
+            border: 3px solid #cbd5e1;
+            border-radius: 0 0 25px 25px;
+            position: relative;
+            background: rgba(255, 255, 255, 0.3);
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+
+        .liquid {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 40%;
+            transition: background-color 1.5s ease;
+        }
+
+        .precipitate {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 0%;
+            opacity: 0.8;
+            transition: height 2s ease, background-color 1s ease;
+        }
+
+        .dropper {
+            width: 12px;
+            height: 80px;
+            background: #94a3b8;
+            border-radius: 6px;
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        .drop {
+            width: 8px;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 80px;
+            opacity: 0;
+        }
+
+        @keyframes drip {
+            0% { top: 80px; opacity: 1; transform: translateX(-50%) scale(1); }
+            100% { top: 120px; opacity: 0; transform: translateX(-50%) scale(0.5); }
+        }
+
+        .dripping {
+            animation: drip 0.8s infinite;
+        }
+
+        .safety-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #fee2e2;
+            padding: 8px 12px;
+            border-radius: 12px;
+            border: 1px solid #fca5a5;
+        }
+
+        .equation-panel {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            min-height: 200px;
+        }
+
+        .lab-bench {
+            height: 20px;
+            background: #475569;
+            width: 100%;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-5xl mx-auto">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-slate-800">№4 Зертханалық жұмыс</h1>
+            <p class="text-lg text-slate-600 font-semibold">Fe²⁺, Fe³⁺ және Cu²⁺ катиондарын сапалық анықтау</p>
+        </header>
+
+        <!-- Safety Rules -->
+        <div class="flex flex-wrap justify-center gap-4 mb-8">
+            <div class="safety-badge">
+                <span class="text-2xl">🥽</span>
+                <span class="text-sm font-medium text-red-800">Қорғаныш көзілдірігі</span>
+            </div>
+            <div class="safety-badge">
+                <span class="text-2xl">🧤</span>
+                <span class="text-sm font-medium text-red-800">Қолғап кию міндетті</span>
+            </div>
+            <div class="safety-badge">
+                <span class="text-2xl">🧪</span>
+                <span class="text-sm font-medium text-red-800">Сілтімен абайлап жұмыс істе!</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            
+            <!-- Experiment Area -->
+            <div class="bg-white p-8 rounded-2xl shadow-lg border border-slate-200">
+                <h3 class="text-xl font-bold mb-6 text-slate-700 flex items-center gap-2">
+                    <span class="bg-blue-500 w-3 h-3 rounded-full"></span> Эксперимент үстелі
+                </h3>
+                
+                <div class="flex justify-around items-end h-64 relative mb-4">
+                    <!-- Tube 1 (Fe2+) -->
+                    <div class="flex flex-col items-center">
+                        <div id="tube1" class="test-tube">
+                            <div class="dropper" id="dropper1"><div class="drop" id="drop1"></div></div>
+                            <div class="liquid" style="background-color: rgba(200, 240, 200, 0.6);"></div>
+                            <div id="precip1" class="precipitate" style="background-color: #2d5a27;"></div>
+                        </div>
+                        <span class="mt-2 text-xs font-bold text-slate-500">FeCl₂</span>
+                    </div>
+
+                    <!-- Tube 2 (Fe3+) -->
+                    <div class="flex flex-col items-center">
+                        <div id="tube2" class="test-tube">
+                            <div class="dropper" id="dropper2"><div class="drop" id="drop2"></div></div>
+                            <div class="liquid" style="background-color: rgba(245, 230, 180, 0.7);"></div>
+                            <div id="precip2" class="precipitate" style="background-color: #8b4513;"></div>
+                        </div>
+                        <span class="mt-2 text-xs font-bold text-slate-500">FeCl₃</span>
+                    </div>
+
+                    <!-- Tube 3 (Cu2+) -->
+                    <div class="flex flex-col items-center">
+                        <div id="tube3" class="test-tube">
+                            <div class="dropper" id="dropper3"><div class="drop" id="drop3"></div></div>
+                            <div class="liquid" style="background-color: rgba(180, 220, 255, 0.6);"></div>
+                            <div id="precip3" class="precipitate" style="background-color: #0000ff;"></div>
+                        </div>
+                        <span class="mt-2 text-xs font-bold text-slate-500">CuSO₄</span>
+                    </div>
+                </div>
+                <div class="lab-bench mb-8"></div>
+
+                <div class="flex flex-wrap gap-3 justify-center">
+                    <button onclick="runExperiment(1)" id="btn1" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-bold transition">Fe²⁺ + NaOH</button>
+                    <button onclick="runExperiment(2)" id="btn2" class="bg-amber-700 hover:bg-amber-800 text-white px-4 py-2 rounded-lg font-bold transition">Fe³⁺ + NaOH</button>
+                    <button onclick="runExperiment(3)" id="btn3" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold transition">Cu²⁺ + NaOH</button>
+                    <button onclick="resetLab()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded-lg font-bold transition">Жаңарту</button>
+                </div>
+            </div>
+
+            <!-- Analysis Area -->
+            <div class="flex flex-col gap-6">
+                <div id="equationPanel" class="equation-panel p-6 border-2 border-dashed border-slate-300 flex flex-col justify-center">
+                    <p class="text-slate-400 text-center italic">Реакцияны бастау үшін сынауықты таңдаңыз...</p>
+                </div>
+
+                <div id="conclusionPanel" class="bg-indigo-50 p-6 rounded-2xl border border-indigo-100 hidden">
+                    <h4 class="font-bold text-indigo-900 mb-2">Қорытынды:</h4>
+                    <p id="conclusionText" class="text-indigo-800 text-sm leading-relaxed"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Definition Bar -->
+        <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <span class="text-blue-600 font-bold block mb-1">Сапалық реакция</span>
+                <p class="text-xs text-slate-600">Заттың немесе ионның бар екенін түс, иіс немесе тұнба арқылы анықтайтын реакция.</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <span class="text-blue-600 font-bold block mb-1">Реактив</span>
+                <p class="text-xs text-slate-600">Анықталатын затпен өзіне тән белгі беретін көмекші химиялық қосылыс.</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <span class="text-blue-600 font-bold block mb-1">Тұнба</span>
+                <p class="text-xs text-slate-600">Реакция нәтижесінде ерітіндіден бөлінетін ерімейтін қатты зат.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const reactions = {
+            1: {
+                title: "Fe²⁺ катионын анықтау",
+                color: "жасыл",
+                compound: "Fe(OH)₂",
+                mol: "FeCl₂ + 2NaOH → Fe(OH)₂↓ + 2NaCl",
+                full: "Fe²⁺ + 2Cl⁻ + 2Na⁺ + 2OH⁻ → Fe(OH)₂↓ + 2Na⁺ + 2Cl⁻",
+                short: "Fe²⁺ + 2OH⁻ → Fe(OH)₂↓",
+                desc: "Fe²⁺ ионына сілті қосқанда ашық жасыл түсті тұнба түзіледі."
+            },
+            2: {
+                title: "Fe³⁺ катионын анықтау",
+                color: "қоңыр",
+                compound: "Fe(OH)₃",
+                mol: "FeCl₃ + 3NaOH → Fe(OH)₃↓ + 3NaCl",
+                full: "Fe³⁺ + 3Cl⁻ + 3Na⁺ + 3OH⁻ → Fe(OH)₃↓ + 3Na⁺ + 3Cl⁻",
+                short: "Fe³⁺ + 3OH⁻ → Fe(OH)₃↓",
+                desc: "Fe³⁺ ионына сілті қосқанда қоңыр (тат түсті) тұнба түзіледі."
+            },
+            3: {
+                title: "Cu²⁺ катионын анықтау",
+                color: "көк",
+                compound: "Cu(OH)₂",
+                mol: "CuSO₄ + 2NaOH → Cu(OH)₂↓ + Na₂SO₄",
+                full: "Cu²⁺ + SO₄²⁻ + 2Na⁺ + 2OH⁻ → Cu(OH)₂↓ + 2Na⁺ + SO₄²⁻",
+                short: "Cu²⁺ + 2OH⁻ → Cu(OH)₂↓",
+                desc: "Cu²⁺ ионына сілті қосқанда ашық көк түсті тұнба түзіледі."
+            }
+        };
+
+        function runExperiment(id) {
+            // Disable buttons
+            for(let i=1; i<=3; i++) document.getElementById('btn'+i).disabled = true;
+
+            const dropper = document.getElementById('dropper' + id);
+            const drop = document.getElementById('drop' + id);
+            const precip = document.getElementById('precip' + id);
+            const eqPanel = document.getElementById('equationPanel');
+
+            // Animation sequence
+            dropper.style.top = "-20px";
+            
+            setTimeout(() => {
+                drop.classList.add('dripping');
+                
+                setTimeout(() => {
+                    precip.style.height = "35%";
+                    showEquations(id);
+                    document.getElementById('conclusionPanel').classList.remove('hidden');
+                    document.getElementById('conclusionText').innerText = reactions[id].desc + " NaOH — бұл катиондарды анықтауға арналған топтық реактив.";
+                }, 1000);
+
+            }, 500);
+        }
+
+        function showEquations(id) {
+            const data = reactions[id];
+            const panel = document.getElementById('equationPanel');
+            panel.innerHTML = `
+                <h4 class="text-xl font-bold text-slate-800 mb-4">${data.title}</h4>
+                <div class="space-y-4">
+                    <div class="p-3 bg-slate-50 rounded border-l-4 border-slate-400">
+                        <p class="text-xs font-bold text-slate-500 uppercase">Молекулалық теңдеу:</p>
+                        <p class="text-lg font-mono">${data.mol}</p>
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded border-l-4 border-slate-400">
+                        <p class="text-xs font-bold text-slate-500 uppercase">Толық иондық теңдеу:</p>
+                        <p class="text-sm font-mono">${data.full}</p>
+                    </div>
+                    <div class="p-3 bg-blue-50 rounded border-l-4 border-blue-400">
+                        <p class="text-xs font-bold text-blue-500 uppercase">Қысқартылған иондық теңдеу:</p>
+                        <p class="text-lg font-mono text-blue-900">${data.short}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function resetLab() {
+            location.reload();
+        }
+    </script>
+</body>
+</html>
